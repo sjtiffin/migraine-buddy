@@ -3,12 +3,22 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Empty from '$lib/components/ui/empty/index.js';
+	import { onMount } from 'svelte';
 
 	let data = $state([]);
-	let currentDate = $state(new Date().toLocaleDateString());
+	let now = $state(new Date());
+	let currentDate = $derived(now.toLocaleDateString());
+	let currentTime = $derived(now.toLocaleTimeString());
+
+	onMount(() => {
+		const interval = setInterval(() => (now = new Date()), 1000);
+		return () => clearInterval(interval);
+	});
 </script>
 
 <h1 class="mb-4 text-center">{currentDate}</h1>
+
+<p class="text-center">{currentTime}</p>
 
 <Carousel.Root class="mx-auto max-w-xs">
 	<Carousel.Content>
